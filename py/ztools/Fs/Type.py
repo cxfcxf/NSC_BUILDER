@@ -1,6 +1,10 @@
 from enum import IntEnum
 
-class Content(IntEnum):
+class _CompatIntEnum(IntEnum):
+	def __str__(self):
+		return f'{self.__class__.__name__}.{self.name}'
+
+class Content(_CompatIntEnum):
 	PROGRAM = 0x0
 	META = 0x1
 	CONTROL = 0x2
@@ -8,12 +12,12 @@ class Content(IntEnum):
 	DATA = 0x4
 	PUBLIC_DATA = 0x5
 
-class Fs(IntEnum):
+class Fs(_CompatIntEnum):
 	NONE = 0x0
 	PFS0 = 0x2
 	ROMFS = 0x3
-	
-class Crypto(IntEnum):
+
+class Crypto(_CompatIntEnum):
 	ERR = 0
 	NONE = 1
 	XTS = 2

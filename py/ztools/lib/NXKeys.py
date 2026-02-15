@@ -1,9 +1,18 @@
+import os
 import os.path as path
 import re
+import sys
 from binascii import hexlify as hx, unhexlify as uhx
 from pathlib import Path
+
+def _exe_dir():
+	if getattr(sys, 'frozen', False):
+		return Path(os.path.dirname(sys.executable))
+	return Path('.')
+
 my_file = Path('keys.txt')
-my_file2 = Path('ztools\\keys.txt')	
+my_file2 = Path('ztools\\keys.txt')
+my_file3 = _exe_dir() / 'keys.txt'
 
 class Keys(dict):
 	def __init__(self, keys_type):
@@ -11,16 +20,21 @@ class Keys(dict):
 		is_key  = re.compile(r'''\s*([a-zA-Z0-9_]*)\s* # name
 								=
 								\s*([a-fA-F0-9]*)\s* # key''', re.X)
+		f = None
 		try:
 			if my_file.is_file():
 				f = open('keys.txt', 'r')
-			if my_file2.is_file():
+			elif my_file2.is_file():
 				f = open('ztools\\keys.txt', 'r')
+			elif my_file3.is_file():
+				f = open(str(my_file3), 'r')
 		except FileNotFoundError:
+			pass
+		if f is None:
 			try:
 				f = open(path.join(path.dirname(path.abspath(__file__)), '%s' % self.keys_type), 'r')
 			except FileNotFoundError:
-				raise FileNotFoundError('Need key file %s.keys in either %s or %s' % (self.keys_type, 
+				raise FileNotFoundError('Need key file %s.keys in either %s or %s' % (self.keys_type,
 					path.expanduser('~/.switch'), path.dirname(path.abspath(__file__))))
 		iterator = (re.search(is_key, l) for l in f)
 		super(Keys, self).__init__({r[1]: uhx(r[2]) for r in iterator if r is not None})

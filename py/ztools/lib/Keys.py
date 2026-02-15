@@ -1,3 +1,4 @@
+import os
 import re
 import aes128
 from binascii import hexlify as hx, unhexlify as uhx
@@ -132,23 +133,33 @@ def load(fileName):
 		else:
 			pass
 
+import sys as _sys
+def _exe_keys_dir():
+	if getattr(_sys, 'frozen', False):
+		return Path(os.path.dirname(_sys.executable))
+	return Path('.')
+
 if sq_settings.key_system =="production":
 	raw_keys_file = Path('keys.txt')
 	raw_keys_file2 = Path('ztools\\keys.txt')
 	raw_keys_file3 = Path('ztools/keys.txt')
+	raw_keys_file4 = _exe_keys_dir() / 'keys.txt'
 else:
 	raw_keys_file = Path('dev_keys.txt')
 	raw_keys_file2 = Path('ztools\\dev_keys.txt')
-	raw_keys_file3 = Path('ztools/keys.txt')	
-	
+	raw_keys_file3 = Path('ztools/keys.txt')
+	raw_keys_file4 = _exe_keys_dir() / 'dev_keys.txt'
+
 if raw_keys_file.is_file():
 	load(raw_keys_file)
 elif raw_keys_file2.is_file():
 	load(raw_keys_file2)
 elif raw_keys_file3.is_file():
-	load(raw_keys_file3)	
-	
-if not raw_keys_file.is_file() and not raw_keys_file2.is_file() and not raw_keys_file3.is_file():
+	load(raw_keys_file3)
+elif raw_keys_file4.is_file():
+	load(raw_keys_file4)
+
+if not raw_keys_file.is_file() and not raw_keys_file2.is_file() and not raw_keys_file3.is_file() and not raw_keys_file4.is_file():
 	print('keys.txt missing')
 		
 #for k in titleKeks:

@@ -959,9 +959,11 @@ def force_update():
 		return True
 	except:
 		return False
-try:	
-	check_current()
-except:pass	
+try:
+	import io as _io, contextlib as _cl
+	with _cl.redirect_stdout(_io.StringIO()), _cl.redirect_stderr(_io.StringIO()):
+		check_current()
+except:pass
 	
 def get_contentname(titleid,roman=True,format='tabs'):
 	cname=False
