@@ -144,23 +144,26 @@ if sq_settings.key_system =="production":
 	raw_keys_file2 = Path('ztools\\keys.txt')
 	raw_keys_file3 = Path('ztools/keys.txt')
 	raw_keys_file4 = _exe_keys_dir() / 'keys.txt'
+	raw_keys_file5 = Path('prod.keys')
+	raw_keys_file6 = _exe_keys_dir() / 'prod.keys'
 else:
 	raw_keys_file = Path('dev_keys.txt')
 	raw_keys_file2 = Path('ztools\\dev_keys.txt')
 	raw_keys_file3 = Path('ztools/keys.txt')
 	raw_keys_file4 = _exe_keys_dir() / 'dev_keys.txt'
+	raw_keys_file5 = None
+	raw_keys_file6 = None
 
-if raw_keys_file.is_file():
-	load(raw_keys_file)
-elif raw_keys_file2.is_file():
-	load(raw_keys_file2)
-elif raw_keys_file3.is_file():
-	load(raw_keys_file3)
-elif raw_keys_file4.is_file():
-	load(raw_keys_file4)
+_raw_keys_candidates = [raw_keys_file, raw_keys_file2, raw_keys_file3, raw_keys_file4, raw_keys_file5, raw_keys_file6]
+_keys_found = False
+for _kf in _raw_keys_candidates:
+	if _kf and _kf.is_file():
+		load(_kf)
+		_keys_found = True
+		break
 
-if not raw_keys_file.is_file() and not raw_keys_file2.is_file() and not raw_keys_file3.is_file() and not raw_keys_file4.is_file():
-	print('keys.txt missing')
+if not _keys_found:
+	print('keys.txt / prod.keys missing')
 		
 #for k in titleKeks:
 #	Print.info('titleKek = ' + k)

@@ -13,6 +13,8 @@ def _exe_dir():
 my_file = Path('keys.txt')
 my_file2 = Path('ztools\\keys.txt')
 my_file3 = _exe_dir() / 'keys.txt'
+my_file4 = Path('prod.keys')
+my_file5 = _exe_dir() / 'prod.keys'
 
 class Keys(dict):
 	def __init__(self, keys_type):
@@ -24,10 +26,14 @@ class Keys(dict):
 		try:
 			if my_file.is_file():
 				f = open('keys.txt', 'r')
+			elif my_file4.is_file():
+				f = open('prod.keys', 'r')
 			elif my_file2.is_file():
 				f = open('ztools\\keys.txt', 'r')
 			elif my_file3.is_file():
 				f = open(str(my_file3), 'r')
+			elif my_file5.is_file():
+				f = open(str(my_file5), 'r')
 		except FileNotFoundError:
 			pass
 		if f is None:
