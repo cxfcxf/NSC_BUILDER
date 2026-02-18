@@ -6652,7 +6652,7 @@ class Nsp(Pfs0):
 							c=c+len(data)
 							fp.flush()
 						try:
-							os.remove(outf)
+							os.remove(xmlfile)
 						except:
 							pass
 					fp.close()
